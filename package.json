@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "test": "spago -x test.dhall test"
+    "test": "spago test"
   }
 }
