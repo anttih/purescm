@@ -4,4 +4,6 @@ import { fileURLToPath } from 'url';
 
 import { main } from "./bundle/index.js";
 
-main();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+main(__dirname)();

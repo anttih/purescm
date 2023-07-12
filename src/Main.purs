@@ -12,7 +12,7 @@ import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Array.NonEmpty as NonEmptyArray
 import Data.Bifunctor (lmap)
 import Data.Compactable (separate)
-import Data.Either (Either(..))
+import Data.Either (Either(..), isRight)
 import Data.Foldable (for_, foldl)
 import Data.Lazy as Lazy
 import Data.List (List)
@@ -38,10 +38,13 @@ import Node.FS.Perms as Perms
 import Node.FS.Stats as Stats
 import Node.FS.Stream (createReadStream, createWriteStream)
 import Node.Glob.Basic (expandGlobs)
+import Node.Library.Execa (execa)
+import Node.Library.Execa.Which (defaultWhichOptions, which)
 import Node.Path (FilePath)
 import Node.Path as Path
 import Node.Process as Process
 import Node.Stream as Stream
+import Partial.Unsafe (unsafeCrashWith)
 import PureScript.Backend.Chez.Constants (moduleForeign, moduleLib, schemeExt)
 import PureScript.Backend.Chez.Convert (codegenModule)
 import PureScript.Backend.Chez.Printer as Printer
@@ -58,7 +61,12 @@ type BuildArgs =
   , outputDir :: FilePath
   }
 
-data Command = Build BuildArgs
+type RunArgs =
+  { moduleName :: String
+  , libDir :: FilePath
+  }
+
+data Command = Build BuildArgs | Run RunArgs
 
 cliArgParser :: ArgParser Command
 cliArgParser =
@@ -67,6 +75,10 @@ cliArgParser =
         "Builds Chez scheme code from corefn.json files"
         do
           Build <$> buildArgsParser <* ArgParser.flagHelp
+    , ArgParser.command [ "run" ]
+        "Runs a modules main function"
+        do
+          Run <$> runArgsParser <* ArgParser.flagHelp
     ]
     <* ArgParser.flagHelp
 
@@ -85,14 +97,31 @@ buildArgsParser =
           # ArgParser.default (Path.concat [ ".", "output-chez" ])
     }
 
-main :: Effect Unit
-main = do
+runArgsParser :: ArgParser RunArgs
+runArgsParser =
+  ArgParser.fromRecord
+    { moduleName:
+        ArgParser.argument [ "--main" ]
+          "Module to be used as the application's entry point.\n\
+          \Defaults to 'Main'."
+          # ArgParser.default "Main"
+    , libDir:
+        ArgParser.argument [ "--libdir" ]
+          "Path to scheme code.\n\
+          \Defaults to './output-chez'."
+          # ArgParser.default (Path.concat [ ".", "output-chez"])
+    }
+
+main :: FilePath -> Effect Unit
+main cliRoot = do
   cliArgs <- Array.drop 2 <$> Process.argv
   case ArgParser.parseArgs "purescm" "Chez scheme PureScript backend" cliArgParser cliArgs of
     Left err ->
       Console.error $ ArgParser.printArgError err
     Right (Build args) ->
       launchAff_ $ runBuild args
+    Right (Run args) ->
+      launchAff_ $ runMain cliRoot args
 
 runBuild :: BuildArgs -> Aff Unit
 runBuild args = do
@@ -132,6 +161,36 @@ runBuild args = do
             Console.log $ "[" <> padding <> index <> " of " <> total <> "] purescm: building " <> unwrap name
             pure coreFnMod
         }
+
+runMain :: FilePath -> RunArgs -> Aff Unit
+runMain cliRoot args = do
+  let
+    runtimePath = Path.concat [ cliRoot, "vendor" ]
+    arguments :: Array String
+    arguments = [ "-q", "--libdirs", runtimePath <> ":" <> args.libDir <> ":" ]
+  schemeBin <- getSchemeBinary
+  spawned <- execa schemeBin arguments identity
+  spawned.stdin.writeUtf8End $ Array.fold
+    [ "(import ("
+    , args.moduleName
+    , " lib)) (with-exception-handler (lambda (e) (display-condition e (console-error-port)) (newline (console-error-port)) (exit -1)) (lambda () (main)))"
+    ]
+  result <- spawned.result
+  case result of
+    Left { message } -> Console.error message
+    Right { stdout } -> Console.log stdout
+
+getSchemeBinary :: Aff String
+getSchemeBinary = do
+  useScheme <- isRight <$> which "scheme" defaultWhichOptions
+  if useScheme then do
+    pure "scheme"
+  else do
+    useChez <- isRight <$> which "chez" defaultWhichOptions
+    if useChez then
+      pure "chez"
+    else do
+      unsafeCrashWith "Could not find scheme binary"
 
 coreFnModulesFromOutput
   :: String
