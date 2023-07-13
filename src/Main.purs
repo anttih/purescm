@@ -28,7 +28,7 @@ import Data.Tuple (Tuple(..))
 import Dodo (plainText)
 import Dodo as Dodo
 import Effect (Effect)
-import Effect.Aff (Aff, effectCanceler, error, launchAff_, makeAff, throwError)
+import Effect.Aff (Aff, attempt, effectCanceler, error, launchAff_, makeAff, throwError)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
 import Node.Encoding (Encoding(..))
@@ -109,7 +109,7 @@ runArgsParser =
         ArgParser.argument [ "--libdir" ]
           "Path to scheme code.\n\
           \Defaults to './output-chez'."
-          # ArgParser.default (Path.concat [ ".", "output-chez"])
+          # ArgParser.default (Path.concat [ ".", "output-chez" ])
     }
 
 main :: FilePath -> Effect Unit
@@ -132,12 +132,10 @@ runBuild args = do
       liftEffect $ Process.exit 1
     Right coreFnModules -> do
       let { directives } = parseDirectiveFile defaultDirectives
-      -- No runtime .ss files needed yet
-      -- copyFile (Path.concat [ "..", "..", "runtime.js" ]) (Path.concat [ testOut, "runtime.js" ])
       mkdirp args.outputDir
       coreFnModules # buildModules
         { directives
-        , foreignSemantics: coreForeignSemantics -- no chez scheme specific foreign semantics yet
+        , foreignSemantics: coreForeignSemantics
         , onCodegenModule: \_ (Module { name: ModuleName name, path }) backend -> do
             let
               formatted =
@@ -151,14 +149,18 @@ runBuild args = do
             unless (Set.isEmpty backend.foreign) do
               let
                 foreignSiblingPath =
-                  fromMaybe path (String.stripSuffix (Pattern (Path.extname path)) path) <> schemeExt
+                  fromMaybe path (String.stripSuffix (Pattern (Path.extname path)) path) <>
+                    schemeExt
               let foreignOutputPath = Path.concat [ modPath, moduleForeign <> schemeExt ]
-              copyFile foreignSiblingPath foreignOutputPath
+              res <- attempt $ copyFile foreignSiblingPath foreignOutputPath
+              unless (isRight res) do
+                Console.log $ "  Foreign implementation missing."
         , onPrepareModule: \build coreFnMod@(Module { name }) -> do
             let total = show build.moduleCount
             let index = show (build.moduleIndex + 1)
             let padding = power " " (SCU.length total - SCU.length index)
-            Console.log $ "[" <> padding <> index <> " of " <> total <> "] purescm: building " <> unwrap name
+            Console.log $ Array.fold
+              [ "[", padding, index, " of ", total, "] purescm: building ", unwrap name ]
             pure coreFnMod
         }
 
@@ -166,6 +168,7 @@ runMain :: FilePath -> RunArgs -> Aff Unit
 runMain cliRoot args = do
   let
     runtimePath = Path.concat [ cliRoot, "vendor" ]
+
     arguments :: Array String
     arguments = [ "-q", "--libdirs", runtimePath <> ":" <> args.libDir <> ":" ]
   schemeBin <- getSchemeBinary
@@ -218,8 +221,6 @@ coreFnModulesFromOutput path globs = runExceptT do
         (pathFromModuleName <$> NonEmptySet.toUnfoldable needed)
     Right modules ->
       pure $ Lazy.force modules
-
--- Utils
 
 readCoreFnModule :: String -> Aff (Either (Tuple FilePath String) (Module Ann))
 readCoreFnModule filePath = do
