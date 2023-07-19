@@ -176,12 +176,11 @@ runMain cliRoot args = do
   spawned.stdin.writeUtf8End $ Array.fold
     [ "(import ("
     , args.moduleName
-    , " lib)) (with-exception-handler (lambda (e) (display-condition e (console-error-port)) (newline (console-error-port)) (exit -1)) (lambda () (main)))"
+    , " lib)) (with-exception-handler (lambda (e) (display-condition e (console-error-port)) (newline (console-error-port)) (exit -1)) main)"
     ]
-  result <- spawned.result
-  case result of
-    Left { message } -> Console.error message
-    Right { stdout } -> Console.log stdout
+  void $ liftEffect $ Stream.pipe spawned.stdout.stream Process.stdout
+  void $ liftEffect $ Stream.pipe spawned.stderr.stream Process.stderr
+  void $ spawned.result
 
 getSchemeBinary :: Aff String
 getSchemeBinary = do
