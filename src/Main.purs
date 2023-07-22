@@ -136,7 +136,7 @@ runBuild args = do
       coreFnModules # buildModules
         { directives
         , foreignSemantics: coreForeignSemantics
-        , onCodegenModule: \_ (Module { name: ModuleName name, path }) backend -> do
+        , onCodegenModule: \_ (Module { name: ModuleName name, path }) backend _ -> do
             let
               formatted =
                 Dodo.print plainText Dodo.twoSpaces
@@ -162,6 +162,7 @@ runBuild args = do
             Console.log $ Array.fold
               [ "[", padding, index, " of ", total, "] purescm: building ", unwrap name ]
             pure coreFnMod
+        , traceIdents: Set.empty
         }
 
 runMain :: FilePath -> RunArgs -> Aff Unit
