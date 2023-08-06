@@ -8,6 +8,7 @@
     object-ref
     make-object
     array-ref
+    array-length
     make-array
     boolean<?
     boolean<=?
@@ -51,6 +52,9 @@
 
   (scm:define array-ref
     srfi:214:flexvector-ref)
+
+  (scm:define array-length
+    srfi:214:flexvector-length)
 
   (scm:define make-object
     (scm:lambda args (scm:apply srfi:125:hash-table (scm:cons string-comparator args))))
