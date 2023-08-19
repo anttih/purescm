@@ -61,12 +61,14 @@ type BuildArgs =
   , outputDir :: FilePath
   }
 
-type RunArgs =
+type BundleArgs =
   { moduleName :: String
   , libDir :: FilePath
   }
 
-data Command = Build BuildArgs | Run RunArgs
+data Command
+  = Build BuildArgs
+  | Bundle BundleArgs
 
 cliArgParser :: ArgParser Command
 cliArgParser =
@@ -75,10 +77,9 @@ cliArgParser =
         "Builds Chez scheme code from corefn.json files"
         do
           Build <$> buildArgsParser <* ArgParser.flagHelp
-    , ArgParser.command [ "run" ]
-        "Runs a modules main function"
-        do
-          Run <$> runArgsParser <* ArgParser.flagHelp
+    , ArgParser.command [ "bundle-app" ]
+        "Bundles .so files to a single program file."
+        do Bundle <$> runArgsParser <* ArgParser.flagHelp
     ]
     <* ArgParser.flagHelp
 
@@ -97,7 +98,7 @@ buildArgsParser =
           # ArgParser.default (Path.concat [ ".", "output-chez" ])
     }
 
-runArgsParser :: ArgParser RunArgs
+runArgsParser :: ArgParser BundleArgs
 runArgsParser =
   ArgParser.fromRecord
     { moduleName:
@@ -120,8 +121,8 @@ main cliRoot = do
       Console.error $ ArgParser.printArgError err
     Right (Build args) ->
       launchAff_ $ runBuild args
-    Right (Run args) ->
-      launchAff_ $ runMain cliRoot args
+    Right (Bundle arg) ->
+      launchAff_ $ runBundle cliRoot arg
 
 runBuild :: BuildArgs -> Aff Unit
 runBuild args = do
@@ -165,19 +166,31 @@ runBuild args = do
         , traceIdents: Set.empty
         }
 
-runMain :: FilePath -> RunArgs -> Aff Unit
-runMain cliRoot args = do
+runBundle :: FilePath -> BundleArgs -> Aff Unit
+runBundle cliRoot args = do
+  let bundlePath = "app"
+  let outPath = Path.concat [bundlePath, "test"]
+  let mainPath = Path.concat [bundlePath, "main.ss"]
+  let mainWpoPath = Path.concat [bundlePath, "main.wpo"]
+  mkdirp bundlePath
+  let
+    mainContent = Array.fold
+      [ "(import (Test.Main lib))"
+      , "(main)"
+      ]
+  FS.writeTextFile UTF8 mainPath mainContent
   let
     runtimePath = Path.concat [ cliRoot, "vendor" ]
-
-    arguments :: Array String
-    arguments = [ "-q", "--libdirs", runtimePath <> ":" <> args.libDir <> ":" ]
+    libDirs = runtimePath <> ":" <> args.libDir <> ":"
+    arguments = [ "-q", "--libdirs", libDirs ]
   schemeBin <- getSchemeBinary
   spawned <- execa schemeBin arguments identity
   spawned.stdin.writeUtf8End $ Array.fold
-    [ "(import ("
-    , args.moduleName
-    , " lib)) (with-exception-handler (lambda (e) (display-condition e (console-error-port)) (newline (console-error-port)) (exit -1)) main)"
+    [ "(optimize-level 3)"
+    , "(compile-imported-libraries #t)"
+    , "(generate-wpo-files #t)"
+    , "(compile-program \"" <> mainPath <> "\")"
+    , "(compile-whole-program \"" <> mainWpoPath <> "\" \"" <> outPath <> "\")"
     ]
   void $ liftEffect $ Stream.pipe spawned.stdout.stream Process.stdout
   void $ liftEffect $ Stream.pipe spawned.stderr.stream Process.stderr

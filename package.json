@@ -3,7 +3,7 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "purescm": "./index.js"
+    "purs-backend-chez": "./index.js"
   },
   "scripts": {
     "test": "spago -x test.dhall test",
