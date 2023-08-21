@@ -116,7 +116,7 @@ runArgsParser =
 main :: FilePath -> Effect Unit
 main cliRoot = do
   cliArgs <- Array.drop 2 <$> Process.argv
-  case ArgParser.parseArgs "purescm" "Chez scheme PureScript backend" cliArgParser cliArgs of
+  case ArgParser.parseArgs "purs-backend-chez" "Chez Scheme backend for PureScript" cliArgParser cliArgs of
     Left err ->
       Console.error $ ArgParser.printArgError err
     Right (Build args) ->
@@ -161,7 +161,7 @@ runBuild args = do
             let index = show (build.moduleIndex + 1)
             let padding = power " " (SCU.length total - SCU.length index)
             Console.log $ Array.fold
-              [ "[", padding, index, " of ", total, "] purescm: building ", unwrap name ]
+              [ "[", padding, index, " of ", total, "] purs-backend-chez: building ", unwrap name ]
             pure coreFnMod
         , traceIdents: Set.empty
         }
@@ -189,8 +189,9 @@ runBundle cliRoot args = do
     [ "(optimize-level 3)"
     , "(compile-imported-libraries #t)"
     , "(generate-wpo-files #t)"
-    , "(compile-program \"" <> mainPath <> "\")"
-    , "(compile-whole-program \"" <> mainWpoPath <> "\" \"" <> outPath <> "\")"
+    , "(begin "
+    , "  (compile-program \"" <> mainPath <> "\")"
+    , "  (compile-whole-program \"" <> mainWpoPath <> "\" \"" <> outPath <> "\"))"
     ]
   void $ liftEffect $ Stream.pipe spawned.stdout.stream Process.stdout
   void $ liftEffect $ Stream.pipe spawned.stderr.stream Process.stderr
