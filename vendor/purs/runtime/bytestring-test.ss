@@ -246,6 +246,27 @@
       (assert (bytestring=? (bytestring-take-code-points (lit "𝕒𝕓𝕔") 3) (lit "𝕒𝕓𝕔")))
       (assert (bytestring=? (bytestring-take-code-points (lit "𝕒𝕓𝕔") 4) (lit "𝕒𝕓𝕔")))
 
+      ;; regex
+
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (lit "foo")) (lit "foo"))
+                (srfi:214:flexvector (lit "foo"))))
+      (assert (not (bytestring-regex-match (bytestring-make-regex (lit "foo")) (lit "bar"))))
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (lit "(a)(b)(c)")) (lit "abc"))
+                (srfi:214:flexvector (lit "a") (lit "b") (lit "c"))))
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (lit "(a|b)(c)")) (lit "ac"))
+                (srfi:214:flexvector (lit "a") (lit "c"))))
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (lit "(a|b)(c)")) (lit "bc"))
+                (srfi:214:flexvector (lit "b") (lit "c"))))
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (string->bytestring "^[a-z]+$")) (lit "abc"))
+                (srfi:214:flexvector (lit "abc"))))
+      (assert (srfi:214:flexvector=?
+                (bytestring-regex-match (bytestring-make-regex (lit "^[a-z]+$")) (lit "abc"))
+                (srfi:214:flexvector (lit "abc"))))
       'unit
       ))
   )
