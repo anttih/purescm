@@ -52,6 +52,7 @@
           )
   (import (only (rnrs bytevectors) native-endianness)
           (chezscheme)
+          (only (purs runtime finalizers) finalizer)
           (prefix (purs runtime srfi :214) srfi:214:))
 
   ;; Immutable UTF-16 encoded slice into a bytevector buffer.
@@ -696,7 +697,7 @@
   ;;
 
   (define-structure
-    (regex pat))
+    (regex code))
 
   (define (bytestring-make-regex bs)
     (let* ([errorcode (foreign-alloc 4)]
@@ -706,21 +707,22 @@
                         ; with non-zero offset.
                         (bytestring-copy-fresh bs)
                         bs)]
-           [pat (pcre-compile
-                  (bytestring-buffer fresh-pat)
-                  (fx/ (bytestring-length fresh-pat) code-unit-length)
-                  0
-                  errorcode
-                  erroroffset
-                  0)])
-      (if (fx=? pat 0)
-        #f ;; TODO free
-        (make-regex pat))))
+           [code (pcre-compile
+                   (bytestring-buffer fresh-pat)
+                   (fx/ (bytestring-length fresh-pat) code-unit-length)
+                   0
+                   errorcode
+                   erroroffset
+                   0)])
+      (if (fx=? code 0)
+        #f
+        (finalizer (make-regex code)
+                   (lambda (o) (pcre-code-free (regex-code o)))))))
 
   (define (bytestring-regex-match regex subject)
-    (let* ([match-data (pcre-match-data-create-from-pattern (regex-pat regex) 0)]
+    (let* ([match-data (pcre-match-data-create-from-pattern (regex-code regex) 0)]
            [rc (pcre-match
-                 (regex-pat regex)
+                 (regex-code regex)
                  (bytestring-buffer subject)
                  (fx/ (bytestring-length subject) code-unit-length)
                  (fx/ (bytestring-offset subject) code-unit-length)
@@ -728,7 +730,7 @@
                  match-data
                  0)])
       (if (fx<? rc 0)
-        #f
+        (begin (pcre-match-data-free match-data) #f)
         (let* ([ovector (pcre-get-ovector-pointer match-data)]
                [count (pcre-get-ovector-count match-data)]
                [out (srfi:214:make-flexvector count)])
@@ -743,7 +745,9 @@
                                  sub-len)])
                 (srfi:214:flexvector-set! out i match-bs)
                 (recur (fx1+ i)))
-              out))))))
+              (begin
+                (pcre-match-data-free match-data)
+                out)))))))
 
   ;;
   ;; PCRE bindings
@@ -755,31 +759,34 @@
 
   ; pcre2_code *pcre2_compile(PCRE2_SPTR pattern, PCRE2_SIZE length, uint32_t options, int *errorcode, PCRE2_SIZE *erroroffset, pcre2_compile_context *ccontext);
   (define pcre-compile
-    (foreign-procedure "pcre2_compile_16"
-                       (u16*        ; pattern
-                        size_t      ; pattern size
-                        unsigned-32 ; options
-                        iptr        ; errorcode
-                        iptr        ; erroroffset
-                        iptr)       ; context
-                       iptr
-                       ))
+    (foreign-procedure "pcre2_compile_16" (u16* size_t unsigned-32 iptr iptr iptr)
+                       iptr))
 
   ; pcre2_match_data *pcre2_match_data_create_from_pattern( const pcre2_code *code, pcre2_general_context *gcontext);
   (define pcre-match-data-create-from-pattern
-    (foreign-procedure "pcre2_match_data_create_from_pattern_16" (iptr iptr) iptr))
+    (foreign-procedure "pcre2_match_data_create_from_pattern_16" (iptr iptr)
+                       iptr))
 
   ; int pcre2_match(const pcre2_code *code, PCRE2_SPTR subject, PCRE2_SIZE length, PCRE2_SIZE startoffset, uint32_t options, pcre2_match_data *match_data, pcre2_match_context *mcontext);
   (define pcre-match
-    (foreign-procedure "pcre2_match_16"
-      (iptr u16* size_t size_t unsigned-32 iptr iptr) int))
+    (foreign-procedure "pcre2_match_16" (iptr u16* size_t size_t unsigned-32 iptr iptr)
+                       int))
 
-  ; PCRE2_SIZE *pcre2_get_ovector_pointer(pcre2_match_data *match_data);
   (define pcre-get-ovector-pointer
-    (foreign-procedure "pcre2_get_ovector_pointer_16" (iptr) iptr))
+    (foreign-procedure "pcre2_get_ovector_pointer_16" (iptr)
+                       iptr))
 
   (define pcre-get-ovector-count
-    (foreign-procedure "pcre2_get_ovector_count_16" (iptr) unsigned-32))
+    (foreign-procedure "pcre2_get_ovector_count_16" (iptr)
+                       unsigned-32))
+
+  (define pcre-match-data-free
+    (foreign-procedure "pcre2_match_data_free_16" (iptr)
+                       void))
+  
+  (define pcre-code-free
+    (foreign-procedure "pcre2_code_free_16" (iptr)
+                       void))
 
 
   )
