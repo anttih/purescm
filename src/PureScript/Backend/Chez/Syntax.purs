@@ -2,14 +2,14 @@ module PureScript.Backend.Chez.Syntax where
 
 import Prelude
 
-import Data.Argonaut as Json
+import JSON as Json
 import Data.Array (foldr)
 import Data.Array as Array
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Array.NonEmpty as NonEmptyArray
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype)
-import Data.Tuple (Tuple(..))
+import Data.Tuple (Tuple)
 import PureScript.Backend.Chez.Constants (rtPrefixed, scmPrefixed)
 import PureScript.Backend.Optimizer.CoreFn (Prop(..))
 

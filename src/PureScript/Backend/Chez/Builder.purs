@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.Cont.Trans (lift)
 import Control.Monad.Except (ExceptT(..), runExceptT)
 import Control.Parallel (parTraverse)
-import Data.Argonaut as Json
+import JSON as Json
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Array.NonEmpty as NonEmptyArray
 import Data.Bifunctor (lmap)
@@ -20,14 +20,12 @@ import Data.Set as Set
 import Data.Set.NonEmpty as NonEmptySet
 import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..))
-import Effect.Aff (Aff)
+import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
-import Node.Encoding (Encoding(..))
-import Node.FS.Aff as FS
-import Node.Glob.Basic (expandGlobs)
-import Node.Path (FilePath)
-import Node.Process as Process
+import Chez (expandGlobs)
+import Chez as Process
+import Chez as FS
 import PureScript.Backend.Optimizer.Builder (BuildEnv, buildModules)
 import PureScript.Backend.Optimizer.Convert (BackendModule, OptimizationSteps)
 import PureScript.Backend.Optimizer.CoreFn (Ann, Module, ModuleName(..), Qualified(..))
@@ -39,20 +37,22 @@ import PureScript.Backend.Optimizer.Semantics (InlineDirectiveMap)
 import PureScript.Backend.Optimizer.Semantics.Foreign (coreForeignSemantics)
 import PureScript.CST.Errors (printParseError)
 
+type FilePath = String
+
 basicBuildMain
   :: { coreFnDirectory :: FilePath
      , coreFnGlobs :: NonEmptyArray String
      , externalDirectivesFile :: Maybe FilePath
-     , onCodegenModule :: BuildEnv -> Module Ann -> BackendModule -> OptimizationSteps -> Aff Unit
-     , onPrepareModule :: BuildEnv -> Module Ann -> Aff (Module Ann)
+     , onCodegenModule :: BuildEnv -> Module Ann -> BackendModule -> OptimizationSteps -> Effect Unit
+     , onPrepareModule :: BuildEnv -> Module Ann -> Effect (Module Ann)
      }
-  -> Aff Unit
+  -> Effect Unit
 basicBuildMain options = do
   coreFnModulesFromOutput options.coreFnDirectory options.coreFnGlobs >>= case _ of
     Left errors -> do
       for_ errors \(Tuple filePath err) -> do
         Console.error $ filePath <> " " <> err
-      liftEffect $ Process.exit' 1
+      liftEffect $ Process.exit 1
     Right coreFnModules -> do
       externalDirectives <- map (fromMaybe Map.empty) $ traverse externalDirectivesFromFile
         options.externalDirectivesFile
@@ -72,7 +72,7 @@ basicBuildMain options = do
 coreFnModulesFromOutput
   :: String
   -> NonEmptyArray String
-  -> Aff (Either (NonEmptyArray (Tuple FilePath String)) (List (Module Ann)))
+  -> Effect (Either (NonEmptyArray (Tuple FilePath String)) (List (Module Ann)))
 coreFnModulesFromOutput path globs = runExceptT do
   paths <- Set.toUnfoldable <$> lift
     (expandGlobs path ((_ <> "/corefn.json") <$> NonEmptyArray.toArray globs))
@@ -96,18 +96,18 @@ coreFnModulesFromOutput path globs = runExceptT do
     Right modules ->
       pure $ Lazy.force modules
 
-readCoreFnModule :: String -> Aff (Either (Tuple FilePath String) (Module Ann))
+readCoreFnModule :: String -> Effect (Either (Tuple FilePath String) (Module Ann))
 readCoreFnModule filePath = do
-  contents <- FS.readTextFile UTF8 filePath
+  contents <- FS.readUTF8TextFile filePath
   case lmap Json.printJsonDecodeError <<< decodeModule =<< Json.jsonParser contents of
     Left err -> do
       pure $ Left $ Tuple filePath err
     Right mod ->
       pure $ Right mod
 
-externalDirectivesFromFile :: FilePath -> Aff InlineDirectiveMap
+externalDirectivesFromFile :: FilePath -> Effect InlineDirectiveMap
 externalDirectivesFromFile filePath = do
-  fileContent <- FS.readTextFile UTF8 filePath
+  fileContent <- FS.readUTF8TextFile filePath
   let { errors, directives } = parseDirectiveFile fileContent
   for_ errors \(Tuple directive { position, error }) -> do
     Console.warn $ "Invalid directive [" <> show (position.line + 1) <> ":"

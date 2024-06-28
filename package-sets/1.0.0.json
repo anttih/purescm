@@ -3,6 +3,8 @@
   "published": "2023-09-30",
   "version": "1.0.0",
   "packages": {
+    "ansi": "7.0.0",
+    "argparse-basic": "2.0.0",
     "arrays": {
       "git": "https://github.com/purescm/purescript-core.git",
       "ref": "b55c8bb976dcddf69fda2593c5707969ca1e13b4",
@@ -27,6 +29,7 @@
       "ref": "b55c8bb976dcddf69fda2593c5707969ca1e13b4",
       "subdir": "control"
     },
+    "debug": "6.0.2",
     "distributive": "6.0.0",
     "effect": {
       "git": "https://github.com/purescm/purescript-core.git",
@@ -134,6 +137,7 @@
     "transformers": "6.0.0",
     "tuples": "7.0.0",
     "type-equality": "4.0.1",
+    "typelevel-prelude": "7.0.0",
     "unfoldable": {
       "git": "https://github.com/purescm/purescript-core.git",
       "ref": "b55c8bb976dcddf69fda2593c5707969ca1e13b4",

@@ -2,7 +2,7 @@ module PureScript.Backend.Chez.Convert where
 
 import Prelude
 
-import Data.Argonaut as Json
+import JSON as Json
 import Data.Array as Array
 import Data.Array.NonEmpty as NEA
 import Data.Array.NonEmpty as NonEmptyArray

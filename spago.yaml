@@ -7,15 +7,15 @@ package:
       githubOwner: purescm
       githubRepo: purescm
   dependencies:
-    - aff
-    - argonaut
     - arrays
+    - argparse-basic
     - backend-optimizer
     - console
     - control
     - dodo-printer
     - effect
     - foldable-traversable
+    - json
     - maybe
     - newtype
     - ordered-collections
@@ -24,41 +24,20 @@ package:
     - strings
     - transformers
     - tuples
-  test:
-    main: Test.Main
-    dependencies:
-      - ansi
-      - argparse-basic
-      - bifunctors
-      - either
-      - filterable
-      - language-cst-parser
-      - lazy
-      - lists
-      - node-buffer
-      - node-child-process
-      - node-execa
-      - node-fs
-      - node-glob-basic
-      - node-path
-      - node-process
-      - node-streams
-      - parallel
-      - partial
-      - posix-types
-      - refs
 workspace:
+  backend:
+    cmd: purescm
+    args:
+      - build
   package_set:
-    registry: 41.2.0
+    path: package-sets/1.0.0.json
   extra_packages:
     dodo-printer:
       git: https://github.com/natefaubion/purescript-dodo-printer.git
       ref: 831c5c963a57ca4bfd62f96335267d7d0785851d
       dependencies:
-        - aff
         - ansi
         - arrays
-        - avar
         - console
         - control
         - effect
@@ -72,24 +51,18 @@ workspace:
         - newtype
         - parallel
         - partial
-        - posix-types
         - prelude
         - safe-coerce
         - strings
         - tuples
     backend-optimizer:
-      git: https://github.com/aristanetworks/purescript-backend-optimizer
-      ref: 54b82ac23143dd47bfafaf52dec81dd7ccf2b490
+      git: https://github.com/anttih/purescript-backend-optimizer
+      ref: b4bba4306706ef789c3d9070c6416f303d8f7430
       dependencies:
-        - aff
         - ansi
-        - argonaut
-        - argparse-basic
         - arrays
         - bifunctors
-        - console
         - control
-        - datetime
         - debug
         - dodo-printer
         - effect
@@ -97,20 +70,18 @@ workspace:
         - enums
         - filterable
         - foldable-traversable
-        - foreign-object
         - integers
+        - json
         - language-cst-parser
         - lazy
         - lists
         - maybe
         - newtype
-        - now
         - numbers
         - ordered-collections
         - orders
         - parallel
         - partial
-        - posix-types
         - prelude
         - refs
         - safe-coerce
@@ -140,7 +111,6 @@ workspace:
         - lists
         - maybe
         - newtype
-        - node-process
         - numbers
         - ordered-collections
         - partial
@@ -152,17 +122,3 @@ workspace:
         - typelevel-prelude
         - unfoldable
         - unsafe-coerce
-    node-glob-basic:
-      git: https://github.com/natefaubion/purescript-node-glob-basic.git
-      ref: v1.2.2
-      dependencies:
-        - aff
-        - console
-        - effect
-        - lists
-        - maybe
-        - node-fs
-        - node-path
-        - node-process
-        - ordered-collections
-        - strings
