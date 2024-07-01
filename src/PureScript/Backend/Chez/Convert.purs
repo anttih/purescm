@@ -236,7 +236,7 @@ codegenExpr codegenEnv@{ currentModule } s = case unwrap s of
     codegenPrimOp codegenEnv o
   PrimUndefined ->
     S.app (S.Identifier $ scmPrefixed "gensym")
-      (S.StringExpr $ Json.stringify $ Json.fromString undefinedSymbol)
+      (S.StringExpr $ Json.print $ Json.fromString undefinedSymbol)
 
   Fail i ->
     -- Note: This can be improved by using `error`, but it requires
@@ -249,7 +249,7 @@ codegenExpr codegenEnv@{ currentModule } s = case unwrap s of
           , S.List [ S.Identifier $ scmPrefixed "make-error" ]
           , S.List
               [ S.Identifier $ scmPrefixed "make-message-condition"
-              , S.StringExpr $ Json.stringify $ Json.fromString i
+              , S.StringExpr $ Json.print $ Json.fromString i
               ]
           ]
       ]
@@ -260,7 +260,7 @@ codegenLiteral codegenEnv = case _ of
   LitNumber n -> S.Float $ wrap $ codegenFloat n
   LitString s -> S.List
     [ S.Identifier $ rtPrefixed "string->pstring"
-    , S.StringExpr $ jsonToChezString $ Json.stringify $ Json.fromString s
+    , S.StringExpr $ jsonToChezString $ Json.print $ Json.fromString s
     ]
   LitChar c -> codegenChar c
   LitBoolean b -> S.Identifier $ if b then "#t" else "#f"

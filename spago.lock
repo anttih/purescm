@@ -11,6 +11,7 @@ workspace:
         - dodo-printer
         - effect
         - foldable-traversable
+        - functions
         - json
         - maybe
         - newtype

@@ -2,7 +2,6 @@ module PureScript.Backend.Chez.Syntax where
 
 import Prelude
 
-import JSON as Json
 import Data.Array (foldr)
 import Data.Array as Array
 import Data.Array.NonEmpty (NonEmptyArray)
@@ -10,6 +9,7 @@ import Data.Array.NonEmpty as NonEmptyArray
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype)
 import Data.Tuple (Tuple)
+import JSON as Json
 import PureScript.Backend.Chez.Constants (rtPrefixed, scmPrefixed)
 import PureScript.Backend.Optimizer.CoreFn (Prop(..))
 
@@ -125,7 +125,7 @@ app f x = List [ f, x ]
 recordLabel :: String -> ChezExpr
 recordLabel key = List
   [ Identifier $ scmPrefixed "string->symbol"
-  , StringExpr $ Json.stringify $ Json.fromString key
+  , StringExpr $ Json.print $ Json.fromString key
   ]
 
 record :: Array (Prop ChezExpr) -> ChezExpr

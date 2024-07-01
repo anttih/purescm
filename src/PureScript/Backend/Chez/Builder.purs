@@ -2,10 +2,11 @@ module PureScript.Backend.Chez.Builder where
 
 import Prelude
 
+import Chez (expandGlobs)
+import Chez as FS
+import Chez as Process
 import Control.Monad.Cont.Trans (lift)
 import Control.Monad.Except (ExceptT(..), runExceptT)
-import Control.Parallel (parTraverse)
-import JSON as Json
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Array.NonEmpty as NonEmptyArray
 import Data.Bifunctor (lmap)
@@ -23,13 +24,12 @@ import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
-import Chez (expandGlobs)
-import Chez as Process
-import Chez as FS
+import Effect.Uncurried (runEffectFn1)
+import JSON as Json
 import PureScript.Backend.Optimizer.Builder (BuildEnv, buildModules)
 import PureScript.Backend.Optimizer.Convert (BackendModule, OptimizationSteps)
 import PureScript.Backend.Optimizer.CoreFn (Ann, Module, ModuleName(..), Qualified(..))
-import PureScript.Backend.Optimizer.CoreFn.Json (decodeModule)
+import PureScript.Backend.Optimizer.CoreFn.Json (decodeModule, printJsonDecodeError)
 import PureScript.Backend.Optimizer.CoreFn.Sort (emptyPull, pullResult, resumePull, sortModules)
 import PureScript.Backend.Optimizer.Directives (parseDirectiveFile)
 import PureScript.Backend.Optimizer.Directives.Defaults (defaultDirectives)
@@ -67,6 +67,7 @@ basicBuildMain options = do
         , onCodegenModule: options.onCodegenModule
         , onPrepareModule: options.onPrepareModule
         , traceIdents: Set.empty
+        , analyzeCustom: \_ _ -> Nothing 
         }
 
 coreFnModulesFromOutput
@@ -75,7 +76,7 @@ coreFnModulesFromOutput
   -> Effect (Either (NonEmptyArray (Tuple FilePath String)) (List (Module Ann)))
 coreFnModulesFromOutput path globs = runExceptT do
   paths <- Set.toUnfoldable <$> lift
-    (expandGlobs path ((_ <> "/corefn.json") <$> NonEmptyArray.toArray globs))
+    (expandGlobs path ((_ <> "/corefn.json") <$> NonEmptyArray.toUnfoldable globs))
   case NonEmptyArray.toArray globs of
     [ "**" ] ->
       sortModules <$> modulesFromPaths paths
@@ -83,7 +84,7 @@ coreFnModulesFromOutput path globs = runExceptT do
       go <<< foldl resumePull emptyPull =<< modulesFromPaths paths
   where
   modulesFromPaths paths = ExceptT do
-    { left, right } <- separate <$> parTraverse readCoreFnModule paths
+    { left, right } <- separate <$> traverse readCoreFnModule paths
     pure $ maybe (Right right) Left $ NonEmptyArray.fromArray left
 
   pathFromModuleName (ModuleName mn) =
@@ -98,8 +99,8 @@ coreFnModulesFromOutput path globs = runExceptT do
 
 readCoreFnModule :: String -> Effect (Either (Tuple FilePath String) (Module Ann))
 readCoreFnModule filePath = do
-  contents <- FS.readUTF8TextFile filePath
-  case lmap Json.printJsonDecodeError <<< decodeModule =<< Json.jsonParser contents of
+  contents <- runEffectFn1 FS.readUTF8TextFile filePath
+  case lmap printJsonDecodeError <<< decodeModule =<< Json.parse contents of
     Left err -> do
       pure $ Left $ Tuple filePath err
     Right mod ->
@@ -107,7 +108,7 @@ readCoreFnModule filePath = do
 
 externalDirectivesFromFile :: FilePath -> Effect InlineDirectiveMap
 externalDirectivesFromFile filePath = do
-  fileContent <- FS.readUTF8TextFile filePath
+  fileContent <- runEffectFn1 FS.readUTF8TextFile filePath
   let { errors, directives } = parseDirectiveFile fileContent
   for_ errors \(Tuple directive { position, error }) -> do
     Console.warn $ "Invalid directive [" <> show (position.line + 1) <> ":"

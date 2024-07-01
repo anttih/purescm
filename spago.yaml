@@ -13,6 +13,7 @@ package:
     - console
     - control
     - dodo-printer
+    - functions
     - effect
     - foldable-traversable
     - json
