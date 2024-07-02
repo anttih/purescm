@@ -3,8 +3,9 @@
   (export argv
           glob
           (rename (exit_ exit))
-          _writeUTF8TextFile
-          _readUTF8TextFile
+          writeUTF8TextFile
+          readUTF8TextFile
+          copyFile
           (rename (system_ system)))
   (import (chezscheme)
           (purs runtime pstring))
@@ -56,10 +57,29 @@
   (define exit_ exit)
 
   (define (readUTF8TextFile path)
-    (error #f "TODO"))
+    (let* ([ip (open-file-input-port (pstring->string path))]
+           [buflen (expt 2 16)]
+           [buf (make-bytevector buflen)])
+      (let-values ([(op extract) (open-bytevector-output-port)])
+        (let loop ()
+          (let ([n (get-bytevector-n! ip buf 0 buflen)])
+            (unless (eof-object? n)
+              (put-bytevector op buf 0 n)
+              (loop))))
+        (close-input-port ip)
+        ; TODO avoid double allocation
+        (string->pstring (utf8->string (extract))))))
 
-  (define (writeUTF8TextFile path)
-    (error #f "TODO"))
+  (define (writeUTF8TextFile path content)
+    (let ([op (open-file-output-port
+                (pstring->string path)
+                (file-options no-fail)
+                'block
+                (make-transcoder (utf-8-codec)))]
+          ; TODO fix double allocation by writing pstring directly to a utf-8 bytevector
+          [output (pstring->string content)])
+      (block-write op output)
+      (close-output-port op)))
 
 (define (copyFile from to)
   (let* ([ip (open-file-input-port (pstring->string from))]
@@ -71,6 +91,8 @@
         (unless (eof-object? n)
           (put-bytevector op buf 0 n)
           (loop))))
+    (close-output-port op)
+    (close-input-port ip)
     '()))
 
   (define (system_ cmd)

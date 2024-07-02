@@ -1,9 +1,10 @@
 (library (Chez.Path foreign)
   (export directorySeparator extname)
-  (import (chezscheme))
+  (import (chezscheme)
+          (purs runtime pstring))
 
-  (define directorySeparator (directory-separator))
+  (define directorySeparator (pstring (directory-separator)))
 
   (define (extname path)
-    (path-extension path))
+    (string->pstring (path-extension (pstring->string path))))
   )
