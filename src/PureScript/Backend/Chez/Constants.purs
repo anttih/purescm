@@ -14,8 +14,5 @@ scmPrefixed = append libChezSchemePrefix
 rtPrefixed :: String -> String
 rtPrefixed = append runtimePrefix
 
-moduleLib :: String
-moduleLib = "lib"
-
 schemeExt :: String
 schemeExt = ".ss"

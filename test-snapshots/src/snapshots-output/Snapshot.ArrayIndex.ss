@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.ArrayIndex lib)
+  (Snapshot.ArrayIndex)
   (export
     testAccessorGetIndex)
   (import

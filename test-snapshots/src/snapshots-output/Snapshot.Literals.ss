@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Literals lib)
+  (Snapshot.Literals)
   (export
     array
     array2

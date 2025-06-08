@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Import.Impl lib)
+  (Snapshot.Import.Impl)
   (export
     Product
     Product*

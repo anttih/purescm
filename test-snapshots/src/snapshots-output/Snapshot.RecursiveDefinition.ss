@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.RecursiveDefinition lib)
+  (Snapshot.RecursiveDefinition)
   (export
     alpha
     bravo
@@ -11,7 +11,7 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Unit lib) Data.Unit.))
+    (prefix (Data.Unit) Data.Unit.))
 
   (scm:define main
     (scm:lambda ()

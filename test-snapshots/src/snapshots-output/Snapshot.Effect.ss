@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Effect lib)
+  (Snapshot.Effect)
   (export
     dontInlineMe
     lastComponentIsRun
@@ -10,7 +10,7 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Unit lib) Data.Unit.))
+    (prefix (Data.Unit) Data.Unit.))
 
   (scm:define dontInlineMe
     (scm:lambda (v0)

@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Comparison lib)
+  (Snapshot.Comparison)
   (export
     booleanComparison
     charComparison

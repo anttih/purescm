@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Constructor lib)
+  (Snapshot.Constructor)
   (export
     Continue1
     Continue1-value0

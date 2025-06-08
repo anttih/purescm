@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Import.Constructor lib)
+  (Snapshot.Import.Constructor)
   (export
     Foo
     Foo?)

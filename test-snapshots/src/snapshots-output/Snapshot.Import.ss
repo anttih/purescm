@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Import lib)
+  (Snapshot.Import)
   (export
     foo
     fortyThree
@@ -9,9 +9,9 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Snapshot.Import.Constructor lib) Snapshot.Import.Constructor.)
-    (prefix (Snapshot.Import.Impl lib) Snapshot.Import.Impl.)
-    (prefix (Snapshot.Import.Product lib) Snapshot.Import.Product.))
+    (prefix (Snapshot.Import.Constructor) Snapshot.Import.Constructor.)
+    (prefix (Snapshot.Import.Impl) Snapshot.Import.Impl.)
+    (prefix (Snapshot.Import.Product) Snapshot.Import.Product.))
 
   (scm:define fst
     (scm:lambda (v0)

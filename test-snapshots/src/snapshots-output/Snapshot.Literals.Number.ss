@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Literals.Number lib)
+  (Snapshot.Literals.Number)
   (export
     minusInfinity
     nan

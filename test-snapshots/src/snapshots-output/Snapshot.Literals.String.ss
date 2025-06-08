@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Literals.String lib)
+  (Snapshot.Literals.String)
   (export
     block1
     block2

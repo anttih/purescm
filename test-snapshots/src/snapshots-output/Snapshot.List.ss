@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.List lib)
+  (Snapshot.List)
   (export
     car
     cdr
@@ -13,10 +13,10 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.List.Types lib) Data.List.Types.)
-    (prefix (Data.Maybe lib) Data.Maybe.)
-    (prefix (Data.Show lib) Data.Show.)
-    (prefix (Test.Assert lib) Test.Assert.))
+    (prefix (Data.List.Types) Data.List.Types.)
+    (prefix (Data.Maybe) Data.Maybe.)
+    (prefix (Data.Show) Data.Show.)
+    (prefix (Test.Assert) Test.Assert.))
 
   (scm:define show
     (rt:record-ref (Data.List.Types.showList Data.Show.showInt) (scm:string->symbol "show")))

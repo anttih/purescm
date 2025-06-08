@@ -1,14 +1,14 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Failing.RecursiveBindingGroupLet lib)
+  (Snapshot.Failing.RecursiveBindingGroupLet)
   (export
     main
     test)
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Unit lib) Data.Unit.))
+    (prefix (Data.Unit) Data.Unit.))
 
   (scm:define test
     (scm:letrec*

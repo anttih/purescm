@@ -34,7 +34,7 @@ import Node.Library.Execa.Which (defaultWhichOptions, which)
 import Node.Path as Path
 import Node.Process as Process
 import Partial.Unsafe (unsafeCrashWith)
-import PureScript.Backend.Chez.Constants (moduleLib, schemeExt)
+import PureScript.Backend.Chez.Constants (schemeExt)
 import Test.Utils (canRunMain, execWithStdin, loadModuleMain, mkdirp, spawnFromParent)
 
 type TestArgs =
@@ -92,7 +92,7 @@ runSnapshotTests { accept, filter } = do
           $ snapshotInputPath
       actualSnapshotOutputPath =
         String.replace (Pattern snapshotInput) (Replacement (Path.concat [ snapshotDir, "output" ]))
-          $ String.replace (Pattern ".purs") (Replacement $ "/" <> moduleLib <> schemeExt)
+          $ String.replace (Pattern ".purs") (Replacement schemeExt)
           $ snapshotInputPath
       name = String.replace (Pattern $ snapshotInput <> "/") (Replacement "")
         $ String.replace (Pattern ".purs") (Replacement "")

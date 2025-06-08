@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Failing.RecursiveBindingGroupTopLevel lib)
+  (Snapshot.Failing.RecursiveBindingGroupTopLevel)
   (export
     main
     test1
@@ -10,7 +10,7 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Unit lib) Data.Unit.))
+    (prefix (Data.Unit) Data.Unit.))
 
   (scm:define test3
     (scm:lambda (n0)

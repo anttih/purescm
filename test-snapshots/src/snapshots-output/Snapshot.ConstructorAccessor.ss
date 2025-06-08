@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.ConstructorAccessor lib)
+  (Snapshot.ConstructorAccessor)
   (export
     First
     First-value0

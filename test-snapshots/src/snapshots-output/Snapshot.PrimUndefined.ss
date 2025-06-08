@@ -1,15 +1,15 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.PrimUndefined lib)
+  (Snapshot.PrimUndefined)
   (export
     main
     testCase)
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Ring lib) Data.Ring.)
-    (prefix (Test.Assert lib) Test.Assert.))
+    (prefix (Data.Ring) Data.Ring.)
+    (prefix (Test.Assert) Test.Assert.))
 
   (scm:define testCase
     (scm:lambda (dictRing0)

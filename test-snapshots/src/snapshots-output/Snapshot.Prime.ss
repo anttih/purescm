@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Prime lib)
+  (Snapshot.Prime)
   (export
     Ctor$p
     Ctor$p*

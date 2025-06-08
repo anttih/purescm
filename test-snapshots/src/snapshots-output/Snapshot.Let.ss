@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Let lib)
+  (Snapshot.Let)
   (export
     isEven
     isOdd

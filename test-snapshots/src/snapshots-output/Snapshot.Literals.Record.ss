@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Literals.Record lib)
+  (Snapshot.Literals.Record)
   (export
     insert
     main
@@ -13,9 +13,9 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Record lib) Record.)
-    (prefix (Test.Assert lib) Test.Assert.)
-    (prefix (Type.Proxy lib) Type.Proxy.)
+    (prefix (Record) Record.)
+    (prefix (Test.Assert) Test.Assert.)
+    (prefix (Type.Proxy) Type.Proxy.)
     (Snapshot.Literals.Record.foreign))
 
   (scm:define insert

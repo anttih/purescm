@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.EffectRef lib)
+  (Snapshot.EffectRef)
   (export
     basicTest
     main
@@ -13,11 +13,11 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Show lib) Data.Show.)
-    (prefix (Data.Unit lib) Data.Unit.)
-    (prefix (Effect.Console lib) Effect.Console.)
-    (prefix (Effect.Ref lib) Effect.Ref.)
-    (prefix (Test.Assert lib) Test.Assert.))
+    (prefix (Data.Show) Data.Show.)
+    (prefix (Data.Unit) Data.Unit.)
+    (prefix (Effect.Console) Effect.Console.)
+    (prefix (Effect.Ref) Effect.Ref.)
+    (prefix (Test.Assert) Test.Assert.))
 
   (scm:define primEffectAtTheEnd
     (scm:let ([_0 (Effect.Ref._new 1)])

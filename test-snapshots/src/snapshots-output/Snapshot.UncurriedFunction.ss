@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.UncurriedFunction lib)
+  (Snapshot.UncurriedFunction)
   (export
     main
     test1a
@@ -15,9 +15,9 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (prefix (Data.Function.Uncurried lib) Data.Function.Uncurried.)
-    (prefix (Effect.Console lib) Effect.Console.)
-    (prefix (Test.Assert lib) Test.Assert.))
+    (prefix (Data.Function.Uncurried) Data.Function.Uncurried.)
+    (prefix (Effect.Console) Effect.Console.)
+    (prefix (Test.Assert) Test.Assert.))
 
   (scm:define test4a
     (scm:lambda (a0)

@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Function lib)
+  (Snapshot.Function)
   (export
     f
     g)

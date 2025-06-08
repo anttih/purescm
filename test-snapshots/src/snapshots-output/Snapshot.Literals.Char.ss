@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Literals.Char lib)
+  (Snapshot.Literals.Char)
   (export
     alarm
     backspace

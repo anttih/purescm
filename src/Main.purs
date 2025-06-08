@@ -36,7 +36,7 @@ import Node.Process as Process
 import Node.Stream as Stream
 import Partial.Unsafe (unsafeCrashWith)
 import PureScript.Backend.Chez.Builder (basicBuildMain)
-import PureScript.Backend.Chez.Constants (moduleLib, schemeExt)
+import PureScript.Backend.Chez.Constants (schemeExt)
 import PureScript.Backend.Chez.Convert (codegenModule)
 import PureScript.Backend.Chez.Printer as Printer
 import PureScript.Backend.Optimizer.CoreFn (Module(..), ModuleName(..))
@@ -170,15 +170,14 @@ runBuild args = do
               $ Printer.printLibrary
               $ codegenModule backend
         let modPath = Path.concat [ args.outputDir, name ]
-        mkdirp modPath
-        let libPath = Path.concat [ modPath, moduleLib <> schemeExt ]
+        let libPath = modPath <> schemeExt
         FS.writeTextFile UTF8 libPath formatted
         unless (Set.isEmpty backend.foreign) do
           let
             foreignSiblingPath =
               fromMaybe path (String.stripSuffix (Pattern (Path.extname path)) path) <>
                 schemeExt
-          let foreignOutputPath = Path.concat [ modPath <> ".foreign" <> schemeExt ]
+          let foreignOutputPath = modPath <> ".foreign" <> schemeExt
           res <- attempt $ copyFile foreignSiblingPath foreignOutputPath
           unless (isRight res) do
             Console.log $ "  Foreign implementation missing."

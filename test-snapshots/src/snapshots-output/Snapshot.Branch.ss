@@ -1,7 +1,7 @@
 #!r6rs
 #!chezscheme
 (library
-  (Snapshot.Branch lib)
+  (Snapshot.Branch)
   (export
     f
     g
