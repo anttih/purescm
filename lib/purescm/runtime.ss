@@ -13,6 +13,8 @@
     make-array
     define-lazy
     lazy
+    define-curried
+    lambda-curried
     boolean<?
     boolean<=?
     boolean>=?
@@ -133,6 +135,23 @@
               (set! value (f))
               (set! state 2)
               value)]))))
+
+  ;
+  ; Currying
+  ;
+
+  (define-syntax define-curried
+    (syntax-rules ()
+      [(_ (name args ...) body ...)
+        (define name (lambda-curried (args ...) body ...)) ]))
+
+  (define-syntax lambda-curried
+    (syntax-rules ()
+      [(_ (arg) body ...)
+       (lambda (arg) body ...)]
+      [(_ (arg args ...) body ...)
+       (lambda (arg)
+         (lambda-curried (args ...) body ...))]))
 
 
   ;
