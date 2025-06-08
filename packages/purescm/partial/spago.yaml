@@ -1,0 +1,6 @@
+package:
+  name: partial
+  dependencies: []
+  test:
+    main: Test.Partial.Main
+    dependencies: []

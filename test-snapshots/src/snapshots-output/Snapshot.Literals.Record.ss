@@ -16,7 +16,7 @@
     (prefix (Record lib) Record.)
     (prefix (Test.Assert lib) Test.Assert.)
     (prefix (Type.Proxy lib) Type.Proxy.)
-    (Snapshot.Literals.Record foreign))
+    (Snapshot.Literals.Record.foreign))
 
   (scm:define insert
     (((Record.insert (scm:list (scm:cons (scm:string->symbol "reflectSymbol") (scm:lambda (_)

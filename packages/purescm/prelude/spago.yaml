@@ -1,0 +1,6 @@
+package:
+  name: prelude
+  dependencies: []
+  test:
+    main: Test.Main
+    dependencies: []

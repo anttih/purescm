@@ -1,0 +1,8 @@
+package:
+  name: console
+  dependencies:
+    - effect
+    - prelude
+  test:
+    main: Test.Console.Main
+    dependencies: []

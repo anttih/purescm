@@ -1,4 +1,4 @@
-(library (Snapshot.Import.Impl foreign) 
+(library (Snapshot.Import.Impl.foreign) 
   (export addImpl) 
   (import (chezscheme))
   

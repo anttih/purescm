@@ -20,7 +20,7 @@ import Data.String.CodeUnits as CodeUnits
 import Data.Tuple (Tuple(..), fst, uncurry)
 import Data.Tuple as Tuple
 import Partial.Unsafe (unsafeCrashWith)
-import PureScript.Backend.Chez.Constants (libChezSchemePrefix, moduleForeign, moduleLib, rtPrefixed, runtimePrefix, scmPrefixed)
+import PureScript.Backend.Chez.Constants (libChezSchemePrefix, moduleLib, rtPrefixed, runtimePrefix, scmPrefixed)
 import PureScript.Backend.Chez.Syntax (ChezDefinition(..), ChezExport(..), ChezExpr, ChezImport(..), ChezImportSet(..), ChezLibrary, recordTypeAccessor, recordTypeCurriedConstructor, recordTypePredicate, recordTypeUncurriedConstructor)
 import PureScript.Backend.Chez.Syntax as S
 import PureScript.Backend.Optimizer.Convert (BackendModule, BackendBindingGroup)
@@ -64,7 +64,7 @@ codegenModule { name, bindings, imports, foreign: foreign_ } =
       | otherwise =
           [ ImportSet $
               ImportLibrary
-                { identifiers: NEA.cons' (coerce name) [ moduleForeign ], version: Nothing }
+                { identifiers: NEA.singleton $ coerce name <> ".foreign", version: Nothing }
           ]
   in
     { "#!r6rs": true

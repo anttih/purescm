@@ -1,0 +1,7 @@
+package:
+  dependencies:
+    - effect
+    - either
+    - maybe
+    - prelude
+  name: exceptions

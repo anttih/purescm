@@ -1,0 +1,13 @@
+package:
+  name: lazy
+  dependencies:
+    - control
+    - foldable-traversable
+    - invariant
+    - prelude
+  test:
+    dependencies:
+      - assert
+      - console
+      - effect
+    main: Test.Main

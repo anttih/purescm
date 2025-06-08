@@ -1,0 +1,14 @@
+package:
+  name: minibench
+  dependencies:
+    - console
+    - effect
+    - integers
+    - numbers
+    - prelude
+    - refs
+  test:
+    dependencies:
+      - console
+      - effect
+    main: Test.Main

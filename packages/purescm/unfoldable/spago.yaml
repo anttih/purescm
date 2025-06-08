@@ -1,0 +1,14 @@
+package:
+  name: unfoldable
+  dependencies:
+    - foldable-traversable
+    - maybe
+    - partial
+    - prelude
+    - tuples
+  test:
+    main: Test.Data.Unfoldable.Main
+    dependencies:
+      - assert
+      - console
+      - effect

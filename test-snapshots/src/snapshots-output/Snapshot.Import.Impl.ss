@@ -13,7 +13,7 @@
   (import
     (prefix (chezscheme) scm:)
     (prefix (purescm runtime) rt:)
-    (Snapshot.Import.Impl foreign))
+    (Snapshot.Import.Impl.foreign))
 
   (scm:define-record-type (Product$ Product* Product?)
     (scm:fields (scm:immutable value0 Product-value0) (scm:immutable value1 Product-value1)))

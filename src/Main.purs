@@ -36,7 +36,7 @@ import Node.Process as Process
 import Node.Stream as Stream
 import Partial.Unsafe (unsafeCrashWith)
 import PureScript.Backend.Chez.Builder (basicBuildMain)
-import PureScript.Backend.Chez.Constants (moduleForeign, moduleLib, schemeExt)
+import PureScript.Backend.Chez.Constants (moduleLib, schemeExt)
 import PureScript.Backend.Chez.Convert (codegenModule)
 import PureScript.Backend.Chez.Printer as Printer
 import PureScript.Backend.Optimizer.CoreFn (Module(..), ModuleName(..))
@@ -178,7 +178,7 @@ runBuild args = do
             foreignSiblingPath =
               fromMaybe path (String.stripSuffix (Pattern (Path.extname path)) path) <>
                 schemeExt
-          let foreignOutputPath = Path.concat [ modPath, moduleForeign <> schemeExt ]
+          let foreignOutputPath = Path.concat [ modPath <> ".foreign" <> schemeExt ]
           res <- attempt $ copyFile foreignSiblingPath foreignOutputPath
           unless (isRight res) do
             Console.log $ "  Foreign implementation missing."

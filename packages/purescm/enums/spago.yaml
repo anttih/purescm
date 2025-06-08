@@ -1,0 +1,19 @@
+package:
+  dependencies:
+    - control
+    - either
+    - gen
+    - maybe
+    - newtype
+    - nonempty
+    - partial
+    - prelude
+    - tuples
+    - unfoldable
+  name: enums
+  test:
+    dependencies:
+      - assert
+      - console
+      - effect
+    main: Test.Main

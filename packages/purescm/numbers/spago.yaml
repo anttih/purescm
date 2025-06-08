@@ -1,0 +1,12 @@
+package:
+  name: numbers
+  dependencies:
+    - functions
+    - maybe
+    - prelude
+  test:
+    main: Test.Main
+    dependencies:
+      - assert
+      - console
+      - effect

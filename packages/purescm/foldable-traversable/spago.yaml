@@ -1,0 +1,24 @@
+package:
+  name: foldable-traversable
+  dependencies:
+    - bifunctors
+    - const
+    - control
+    - either
+    - functors
+    - identity
+    - maybe
+    - newtype
+    - orders
+    - prelude
+    - tuples
+  test:
+    main: Test.Main
+    dependencies:
+      - assert
+      - console
+      - effect
+      - functions
+      - integers
+      - numbers
+      - unsafe-coerce

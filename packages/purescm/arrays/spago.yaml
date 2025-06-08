@@ -1,0 +1,25 @@
+package:
+  name: arrays
+  dependencies:
+    - bifunctors
+    - control
+    - foldable-traversable
+    - functions
+    - maybe
+    - nonempty
+    - partial
+    - prelude
+    - safe-coerce
+    - st
+    - tailrec
+    - tuples
+    - unfoldable
+    - unsafe-coerce
+  test:
+    main: Test.Array.Main
+    dependencies:
+      - assert
+      - console
+      - const
+      - effect
+      - orders

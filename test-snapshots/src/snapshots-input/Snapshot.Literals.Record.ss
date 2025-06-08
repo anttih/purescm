@@ -1,4 +1,4 @@
-(library (Snapshot.Literals.Record foreign) 
+(library (Snapshot.Literals.Record.foreign) 
   (export minusTwo unsafeGetNotFound)
   (import (chezscheme)
           (prefix (purescm runtime) rt:))

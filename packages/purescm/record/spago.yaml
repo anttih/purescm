@@ -1,0 +1,11 @@
+package:
+  name: record
+  dependencies:
+    - functions
+    - prelude
+    - unsafe-coerce
+  test:
+    main: Test.Main
+    dependencies:
+      - assert
+      - effect

@@ -1,0 +1,4 @@
+package:
+  name: effect
+  dependencies:
+    - prelude

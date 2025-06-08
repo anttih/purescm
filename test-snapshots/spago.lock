@@ -289,14 +289,94 @@
         "validation": "6.0.0"
       }
     },
-    "extra_packages": {}
+    "extra_packages": {
+      "arrays": {
+        "path": "../packages/purescm/arrays"
+      },
+      "assert": {
+        "path": "../packages/purescm/assert"
+      },
+      "console": {
+        "path": "../packages/purescm/console"
+      },
+      "control": {
+        "path": "../packages/purescm/control"
+      },
+      "datetime": {
+        "path": "../packages/purescm/datetime"
+      },
+      "effect": {
+        "path": "../packages/purescm/effect"
+      },
+      "enums": {
+        "path": "../packages/purescm/enums"
+      },
+      "exceptions": {
+        "path": "../packages/purescm/exceptions"
+      },
+      "foldable-traversable": {
+        "path": "../packages/purescm/foldable-traversable"
+      },
+      "foreign-object": {
+        "path": "../packages/purescm/foreign-object"
+      },
+      "functions": {
+        "path": "../packages/purescm/functions"
+      },
+      "integers": {
+        "path": "../packages/purescm/integers"
+      },
+      "json": {
+        "path": "../packages/purescm/json"
+      },
+      "lazy": {
+        "path": "../packages/purescm/lazy"
+      },
+      "lists": {
+        "path": "../packages/purescm/lists"
+      },
+      "minibench": {
+        "path": "../packages/purescm/minibench"
+      },
+      "numbers": {
+        "path": "../packages/purescm/numbers"
+      },
+      "partial": {
+        "path": "../packages/purescm/partial"
+      },
+      "prelude": {
+        "path": "../packages/purescm/prelude"
+      },
+      "quickcheck": {
+        "path": "../packages/purescm/quickcheck"
+      },
+      "random": {
+        "path": "../packages/purescm/random"
+      },
+      "record": {
+        "path": "../packages/purescm/record"
+      },
+      "refs": {
+        "path": "../packages/purescm/refs"
+      },
+      "st": {
+        "path": "../packages/purescm/st"
+      },
+      "strings": {
+        "path": "../packages/purescm/strings"
+      },
+      "unfoldable": {
+        "path": "../packages/purescm/unfoldable"
+      },
+      "unsafe-coerce": {
+        "path": "../packages/purescm/unsafe-coerce"
+      }
+    }
   },
   "packages": {
     "arrays": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "arrays",
+      "type": "local",
+      "path": "../packages/purescm/arrays",
       "dependencies": [
         "bifunctors",
         "control",
@@ -315,10 +395,8 @@
       ]
     },
     "assert": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "assert",
+      "type": "local",
+      "path": "../packages/purescm/assert",
       "dependencies": [
         "console",
         "effect",
@@ -352,10 +430,8 @@
       ]
     },
     "console": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "console",
+      "type": "local",
+      "path": "../packages/purescm/console",
       "dependencies": [
         "effect",
         "prelude"
@@ -384,10 +460,8 @@
       ]
     },
     "control": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "control",
+      "type": "local",
+      "path": "../packages/purescm/control",
       "dependencies": [
         "newtype",
         "prelude"
@@ -406,10 +480,8 @@
       ]
     },
     "effect": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "effect",
+      "type": "local",
+      "path": "../packages/purescm/effect",
       "dependencies": [
         "prelude"
       ]
@@ -426,10 +498,8 @@
       ]
     },
     "enums": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "enums",
+      "type": "local",
+      "path": "../packages/purescm/enums",
       "dependencies": [
         "control",
         "either",
@@ -444,10 +514,8 @@
       ]
     },
     "exceptions": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "exceptions",
+      "type": "local",
+      "path": "../packages/purescm/exceptions",
       "dependencies": [
         "effect",
         "either",
@@ -477,10 +545,8 @@
       ]
     },
     "foldable-traversable": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "foldable-traversable",
+      "type": "local",
+      "path": "../packages/purescm/foldable-traversable",
       "dependencies": [
         "bifunctors",
         "const",
@@ -517,10 +583,8 @@
       ]
     },
     "functions": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "functions",
+      "type": "local",
+      "path": "../packages/purescm/functions",
       "dependencies": [
         "prelude"
       ]
@@ -574,10 +638,8 @@
       ]
     },
     "integers": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "integers",
+      "type": "local",
+      "path": "../packages/purescm/integers",
       "dependencies": [
         "maybe",
         "numbers",
@@ -594,10 +656,8 @@
       ]
     },
     "lazy": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "lazy",
+      "type": "local",
+      "path": "../packages/purescm/lazy",
       "dependencies": [
         "control",
         "foldable-traversable",
@@ -606,9 +666,8 @@
       ]
     },
     "lists": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-lists.git",
-      "rev": "71502a132567cf7f32c2242d57b1cba2c77ebc15",
+      "type": "local",
+      "path": "../packages/purescm/lists",
       "dependencies": [
         "bifunctors",
         "control",
@@ -636,10 +695,8 @@
       ]
     },
     "minibench": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "minibench",
+      "type": "local",
+      "path": "../packages/purescm/minibench",
       "dependencies": [
         "console",
         "effect",
@@ -672,10 +729,8 @@
       ]
     },
     "numbers": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "numbers",
+      "type": "local",
+      "path": "../packages/purescm/numbers",
       "dependencies": [
         "functions",
         "maybe",
@@ -728,17 +783,13 @@
       ]
     },
     "partial": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "partial",
+      "type": "local",
+      "path": "../packages/purescm/partial",
       "dependencies": []
     },
     "prelude": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "prelude",
+      "type": "local",
+      "path": "../packages/purescm/prelude",
       "dependencies": []
     },
     "profunctor": {
@@ -757,10 +808,8 @@
       ]
     },
     "record": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "record",
+      "type": "local",
+      "path": "../packages/purescm/record",
       "dependencies": [
         "functions",
         "prelude",
@@ -768,10 +817,8 @@
       ]
     },
     "refs": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "refs",
+      "type": "local",
+      "path": "../packages/purescm/refs",
       "dependencies": [
         "effect",
         "prelude"
@@ -797,10 +844,8 @@
       ]
     },
     "st": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "st",
+      "type": "local",
+      "path": "../packages/purescm/st",
       "dependencies": [
         "effect",
         "partial",
@@ -810,10 +855,8 @@
       ]
     },
     "strings": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "strings",
+      "type": "local",
+      "path": "../packages/purescm/strings",
       "dependencies": [
         "arrays",
         "control",
@@ -886,10 +929,8 @@
       "dependencies": []
     },
     "unfoldable": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "unfoldable",
+      "type": "local",
+      "path": "../packages/purescm/unfoldable",
       "dependencies": [
         "foldable-traversable",
         "maybe",
@@ -899,10 +940,8 @@
       ]
     },
     "unsafe-coerce": {
-      "type": "git",
-      "url": "https://github.com/purescm/purescript-core.git",
-      "rev": "b5474536977275bda9b1771e06e5f697e0a846d9",
-      "subdir": "unsafe-coerce",
+      "type": "local",
+      "path": "../packages/purescm/unsafe-coerce",
       "dependencies": []
     },
     "validation": {

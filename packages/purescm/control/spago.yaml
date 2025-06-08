@@ -1,0 +1,9 @@
+package:
+  name: control
+  dependencies:
+    - prelude
+    - newtype
+  test:
+    main: Test.Main
+    dependencies:
+      - effect

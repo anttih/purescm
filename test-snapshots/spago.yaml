@@ -57,3 +57,58 @@ workspace:
       - build
   packageSet:
     path: ../package-sets/1.0.0.json
+  extraPackages:
+    arrays:
+      path: ../packages/purescm/arrays
+    assert:
+      path: ../packages/purescm/assert
+    console:
+      path: ../packages/purescm/console
+    control:
+      path: ../packages/purescm/control
+    datetime:
+      path: ../packages/purescm/datetime
+    effect:
+      path: ../packages/purescm/effect
+    enums:
+      path: ../packages/purescm/enums
+    exceptions:
+      path: ../packages/purescm/exceptions
+    foldable-traversable:
+      path: ../packages/purescm/foldable-traversable
+    foreign-object:
+      path: ../packages/purescm/foreign-object
+    functions:
+      path: ../packages/purescm/functions
+    integers:
+      path: ../packages/purescm/integers
+    json:
+      path: ../packages/purescm/json
+    lazy:
+      path: ../packages/purescm/lazy
+    lists:
+      path: ../packages/purescm/lists
+    minibench:
+      path: ../packages/purescm/minibench
+    numbers:
+      path: ../packages/purescm/numbers
+    partial:
+      path: ../packages/purescm/partial
+    prelude:
+      path: ../packages/purescm/prelude
+    quickcheck:
+      path: ../packages/purescm/quickcheck
+    random:
+      path: ../packages/purescm/random
+    record:
+      path: ../packages/purescm/record
+    refs:
+      path: ../packages/purescm/refs
+    st:
+      path: ../packages/purescm/st
+    strings:
+      path: ../packages/purescm/strings
+    unfoldable:
+      path: ../packages/purescm/unfoldable
+    unsafe-coerce:
+      path: ../packages/purescm/unsafe-coerce
