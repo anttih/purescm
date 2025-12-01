@@ -37,7 +37,7 @@
             packages = [
               pkgs.purescript-language-server
               pkgs.purs-backend-es
-              pkgs.purs-bin.purs-0_15_10
+              pkgs.purs-bin.purs-0_15_15
               pkgs.purs-tidy
               pkgs.spago-unstable
               pkgs.nodejs-slim
