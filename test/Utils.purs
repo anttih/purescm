@@ -80,7 +80,7 @@ loadModuleMain options = do
     spawned.stdin.writeUtf8End $ Array.fold
       [ "(base-exception-handler (lambda (e) (display-condition e (console-error-port)) (newline (console-error-port)) (exit -1)))"
       , "(top-level-program (import (only (chezscheme) base-exception-handler exit lambda)"
-      , "                           (" <> options.moduleName <> " lib)"
+      , "                           (" <> options.moduleName <> ")"
       , "                           (only (purescm stack-trace) print-stack-trace))"
       , "  (base-exception-handler (lambda (e) (print-stack-trace e) (exit -1)))"
       , "  (main))"
